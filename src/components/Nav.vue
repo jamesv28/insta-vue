@@ -1,11 +1,17 @@
 <script setup>
 import AuthModal from './AuthModal.vue'
 import {ref} from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const searchUsers = ref('')
 
 const onSearch = () => {
-    console.log('search')
+    if(searchUsers.value.length) {
+        router.push(`/profile/${searchUsers.value}`)
+        searchUsers.value = ''
+    }
+   
 }
 
 const isAuthenticated = ref(false)
@@ -18,8 +24,8 @@ const isAuthenticated = ref(false)
         <div class="nav-container">
             <div class="left-container">
                 <router-link to="/">Instagram</router-link>
-                <a-input
-                    v-model="searchUsers"
+                <a-input-search
+                    v-model:value="searchUsers"
                     placeholder="input search text"
                     style="width: 100px"
                     @search="onSearch"
