@@ -1,4 +1,5 @@
 <script setup>
+import AuthModal from './AuthModal.vue'
 import {ref} from 'vue'
 
 const searchUsers = ref('')
@@ -6,6 +7,8 @@ const searchUsers = ref('')
 const onSearch = () => {
     console.log('search')
 }
+
+const isAuthenticated = ref(false)
 </script>
 
 
@@ -22,9 +25,13 @@ const onSearch = () => {
                     @search="onSearch"
                 />
             </div>
-            <div class="right-container">
-                <a-button type="primary">Sign Up</a-button>
-                <a-button type="primary">Sign In</a-button>
+            <div class="right-container" v-if="!isAuthenticated">
+                <auth-modal :isLogin="false"/>
+                <auth-modal :isLogIn="true" />
+            </div>
+            <div class="right-container" v-else>
+                <a-button type="primary">Profile</a-button>
+                <a-button type="default">Logout</a-button>
             </div>
         </div>
     </a-layout-header>
@@ -44,6 +51,11 @@ const onSearch = () => {
 
 .left-container a {
     margin-right: 10px;
+}
+
+.right-container {
+    display: flex;
+    align-items: center;
 }
 .right-container button{
     margin-left: 10px;
