@@ -32,7 +32,7 @@ const isAuthenticated = ref(false)
                 />
             </div>
             <div class="right-container" v-if="!isAuthenticated">
-                <auth-modal :isLogin="false"/>
+                <auth-modal :isLogIn="false"/>
                 <auth-modal :isLogIn="true" />
             </div>
             <div class="right-container" v-else>

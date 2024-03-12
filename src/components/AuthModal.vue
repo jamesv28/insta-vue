@@ -1,24 +1,30 @@
 <script setup>
-import {ref} from 'vue'
+import {reactive, ref} from 'vue'
+import { storeToRefs } from 'pinia'
+import {useUserStore} from '../stores/users'
 
 const open = ref(false);
-
+const userStore = useUserStore()
+const {errorMessage} = storeToRefs(userStore)
 const showModal = () => {
   open.value = true;
 };
 
+const userCredentials = reactive({
+  email: '',
+  password: '',
+  username: ''
+})
+
 const handleOk = (e) => {
-  console.log(e);
-  open.value = false;
+  userStore.handleSignup(userCredentials)
+  console.log('error message', errorMessage)
+  // open.value = false;
 };
 
 const props = defineProps(['isLogIn'])
 
 const title = props.isLogIn ? 'Login' : 'Signup'
-
-const username = ref('')
-const email = ref('')
-const password = ref('')
 
 </script>
 
@@ -32,9 +38,10 @@ const password = ref('')
         {{ title }}
     </a-button>
     <a-modal v-model:open="open" :title="title" @ok="handleOk" class="modal-container">
-        <a-input v-if="isLogIn == false" v-model:value="username" placeholder="Username" />   
-        <a-input v-model:value="email" placeholder="email" />
-        <a-input v-model:value="password" placeholder="password" />
+        <a-input v-if="isLogIn == false" v-model:value="userCredentials.username" placeholder="Username" /> 
+        <a-input v-model:value="userCredentials.email" placeholder="email" />
+        <a-input v-model:value="userCredentials.password" placeholder="password" />
+        <a-typography-text v-if="errorMessage" type="danger">{{ errorMessage }}</a-typography-text>
     </a-modal>
   </div>
 </template>
