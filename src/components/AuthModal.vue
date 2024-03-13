@@ -40,7 +40,7 @@ const title = props.isLogIn ? 'Login' : 'Signup'
     <a-modal v-model:open="open" :title="title" @ok="handleOk" class="modal-container">
         <a-input v-if="isLogIn == false" v-model:value="userCredentials.username" placeholder="Username" /> 
         <a-input v-model:value="userCredentials.email" placeholder="email" />
-        <a-input v-model:value="userCredentials.password" placeholder="password" />
+        <a-input v-model:value="userCredentials.password" placeholder="password" type="password" />
         <a-typography-text v-if="errorMessage" type="danger">{{ errorMessage }}</a-typography-text>
     </a-modal>
   </div>
