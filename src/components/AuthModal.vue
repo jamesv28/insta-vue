@@ -5,7 +5,8 @@ import {useUserStore} from '../stores/users'
 
 const open = ref(false);
 const userStore = useUserStore()
-const {errorMessage} = storeToRefs(userStore)
+const {errorMessage, loading} = storeToRefs(userStore)
+
 const showModal = () => {
   open.value = true;
 };
@@ -22,6 +23,11 @@ const handleOk = (e) => {
   // open.value = false;
 };
 
+const handleCancel = () => {
+  userStore.clearErrorMessage()
+  open.value = false
+}
+
 const props = defineProps(['isLogIn'])
 
 const title = props.isLogIn ? 'Login' : 'Signup'
@@ -37,10 +43,26 @@ const title = props.isLogIn ? 'Login' : 'Signup'
     >
         {{ title }}
     </a-button>
-    <a-modal v-model:open="open" :title="title" @ok="handleOk" class="modal-container">
-        <a-input v-if="isLogIn == false" v-model:value="userCredentials.username" placeholder="Username" /> 
-        <a-input v-model:value="userCredentials.email" placeholder="email" />
-        <a-input v-model:value="userCredentials.password" placeholder="password" type="password" />
+    <a-modal v-model:open="open" :title="title" class="modal-container">
+        <template #footer>
+          <a-button key="back" @click="handleCancel">Cancel</a-button>
+          <a-button 
+            key="submit" 
+            type="primary" 
+            @click="handleOk"
+            :disabled="loading"
+        >
+          Submit
+        </a-button>
+        </template>
+        <div class="input-container" v-if="!loading">
+          <a-input v-if="isLogIn == false" v-model:value="userCredentials.username" placeholder="Username" /> 
+          <a-input v-model:value="userCredentials.email" placeholder="email" />
+          <a-input v-model:value="userCredentials.password" placeholder="password" type="password" />
+        </div>
+        <div class="spinner" v-else> 
+          <a-spin></a-spin>
+        </div>
         <a-typography-text v-if="errorMessage" type="danger">{{ errorMessage }}</a-typography-text>
     </a-modal>
   </div>
@@ -55,5 +77,10 @@ const title = props.isLogIn ? 'Login' : 'Signup'
     margin-bottom: 12px;
 }
  
-
+.spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+}
 </style>
