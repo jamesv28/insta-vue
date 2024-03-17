@@ -5,7 +5,7 @@ import {useUserStore} from '../stores/users'
 
 const open = ref(false);
 const userStore = useUserStore()
-const {errorMessage, loading} = storeToRefs(userStore)
+const {errorMessage, loading, user} = storeToRefs(userStore)
 
 const showModal = () => {
   open.value = true;
@@ -17,10 +17,21 @@ const userCredentials = reactive({
   username: ''
 })
 
-const handleOk = (e) => {
-  userStore.handleSignup(userCredentials)
-  console.log('error message', errorMessage)
+const clearUserCredentials = () => {
+  userCredentials.email = ''
+  userCredentials.password = ''
+  userCredentials.username = ''
+}
+
+const handleOk = async (e) => {
+  await userStore.handleSignup(userCredentials)
+  // console.log('error message', errorMessage)
   // open.value = false;
+  if (user.value) {
+    clearUserCredentials()
+    userStore.clearErrorMessage()
+    open.value = false
+  }
 };
 
 const handleCancel = () => {

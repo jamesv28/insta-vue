@@ -24,47 +24,64 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const handleSignup = async (credentials) => {
-    const {username, password, email} = credentials
-    if (password.length < 6) {
-      return errorMessage.value = 'Password must be validated'
+    const {email, password, username} = credentials;
+
+    if(password.length < 6){
+      return errorMessage.value = "Password length is too short"
     }
-    if (username.length < 3) {
-      return errorMessage.value = 'Username is too short'
+
+    if(username.length < 4){
+      return errorMessage.value = "Username length is too short"
     }
-    if (!validateEmail(email)) {
-      console.log('in the email block')
-     return errorMessage.value = 'Incorrect email'
+
+    if(!validateEmail(email)){
+      return errorMessage.value = "Email is invalid"
     }
 
     loading.value = true
 
     const {data: userWithUsername} = await supabase
-                .from('users')
-                .select()
-                .eq('username', username)
-                .single()
+      .from("users")
+      .select()
+      .eq('username', username)
+      .single()
 
-    if(userWithUsername) {
+    
+    if(userWithUsername){
       loading.value = false
-      return errorMessage.value = 'User already exists'
+      return errorMessage.value = "User already registered"
     }
 
-    errorMessage.value = ''
+    errorMessage.value = ""
 
     const {error} = await supabase.auth.signUp({
       email,
       password
     })
 
-    if (error) {
+    if(error){
       loading.value = false
       return errorMessage.value = error.message
     }
+    
+    await supabase.from("users").insert({
+      username,
+      email
+    });
 
-    await supabase.from('users').insert({
-      email,
-      username
-    })
+    const {data: newUser} = await supabase
+      .from("users")
+      .select()
+      .eq('email', email)
+      .single()
+
+    
+    user.value = {
+      id: newUser.id,
+      email: newUser.email,
+      username: newUser.username
+    }
+
     loading.value = false
   }
 
