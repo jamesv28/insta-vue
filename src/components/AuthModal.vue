@@ -29,7 +29,7 @@ const handleOk = async (e) => {
   if(props.isLogIn) {
     await userStore.handleLogin({
       password: userCredentials.password,
-      email: userCredentials.password
+      email: userCredentials.email
     })
   }
   else {
