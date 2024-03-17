@@ -15,9 +15,41 @@ export const useUserStore = defineStore('user', () => {
       )
   }
 
-  const handleLogin = (credentials) => {
+  const handleLogin = async (credentials) => {
+      const {email, password} =credentials
+      if(!validateEmail(email)) {
+        errorMessage.value = "Not a valid email"
+      }
+
+      if(!password.length) {
+        errorMessage.value = 'You must enter in a valid password'
+      }
+
+      loading.value = true
+
+      const {data, error} = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+
+      if(error) {
+        loading.value = false
+        errorMessage.value = error.message
+      }
+
+      const {data: existingUser} = await supabase
+      .from("users")
+      .select()
+      .eq('email', email)
+      .single()
     
-  }
+    user.value = {
+      email: existingUser.email,
+      username: existingUser.username,
+      id: existingUser.id
+    }
+    loading.value = false;
+    errorMessage.value = ""  }
 
   const getUsers = () => {
     
@@ -100,6 +132,7 @@ export const useUserStore = defineStore('user', () => {
     handleSignout,
     errorMessage,
     clearErrorMessage,
-    loading
+    loading,
+    handleLogin
   }
 })

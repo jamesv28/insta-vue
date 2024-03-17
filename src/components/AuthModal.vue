@@ -24,9 +24,18 @@ const clearUserCredentials = () => {
 }
 
 const handleOk = async (e) => {
-  await userStore.handleSignup(userCredentials)
   // console.log('error message', errorMessage)
   // open.value = false;
+  if(props.isLogIn) {
+    await userStore.handleLogin({
+      password: userCredentials.password,
+      email: userCredentials.password
+    })
+  }
+  else {
+    await userStore.handleSignup(userCredentials)
+
+  }
   if (user.value) {
     clearUserCredentials()
     userStore.clearErrorMessage()
