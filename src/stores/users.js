@@ -6,6 +6,7 @@ export const useUserStore = defineStore('user', () => {
   const user = ref(null)
   const errorMessage = ref("")
   const loading = ref(false)
+  const userLoading = ref(false)
 
   const validateEmail = (email) => {
     return String(email)
@@ -52,11 +53,12 @@ export const useUserStore = defineStore('user', () => {
     errorMessage.value = ""  }
 
   const getUser = async () => {
-    loading.value = true
+    userLoading.value = true
     const res = await supabase.auth.getUser()
 
+
     if(!res.data.user) {
-      loading.value = false
+      userLoading.value = false
       return user.value = null
     }
 
@@ -72,7 +74,7 @@ export const useUserStore = defineStore('user', () => {
       id: userWithEmail.id
     }
 
-    loading.value = false
+    userLoading.value = false
 
   }
 
@@ -138,8 +140,9 @@ export const useUserStore = defineStore('user', () => {
     loading.value = false
   }
 
-  const handleSignout = () => {
-
+  const handleSignout = async () => {
+    await supabase.auth.signOut()
+    user.value = null
   }
 
   const clearErrorMessage = () => {
@@ -154,6 +157,7 @@ export const useUserStore = defineStore('user', () => {
     errorMessage,
     clearErrorMessage,
     loading,
-    handleLogin
+    handleLogin,
+    userLoading
   }
 })

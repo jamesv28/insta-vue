@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 import {useUserStore} from "../stores/users"
 
 const userStore = useUserStore()
-const {user} = storeToRefs(userStore)
+const {user, userLoading} = storeToRefs(userStore)
 const router = useRouter()
 const searchUsers = ref('')
 
@@ -18,7 +18,9 @@ const onSearch = () => {
    
 }
 
-const isAuthenticated = ref(false)
+const logout = async () => {
+    await userStore.handleSignout()
+}
 </script>
 
 
@@ -35,13 +37,15 @@ const isAuthenticated = ref(false)
                     @search="onSearch"
                 />
             </div>
-            <div class="right-container" v-if="!user">
-                <auth-modal :isLogIn="false"/>
-                <auth-modal :isLogIn="true" />
-            </div>
-            <div class="right-container" v-else>
-                <a-button type="primary">Profile</a-button>
-                <a-button type="default">Logout</a-button>
+            <div class="content" v-if="!userLoading">
+                <div class="right-container" v-if="!user">
+                    <auth-modal :isLogIn="false"/>
+                    <auth-modal :isLogIn="true" />
+                </div>
+                <div class="right-container" v-else>
+                    <a-button type="primary">Profile</a-button>
+                    <a-button type="primary" @click="logout">Logout</a-button>
+                </div>
             </div>
         </div>
     </a-layout-header>
@@ -52,6 +56,11 @@ const isAuthenticated = ref(false)
 .nav-container {
     display: flex;
     justify-content: space-between;
+}
+
+.content {
+    display: flex;
+    align-items: center;
 }
 
 .left-container {
