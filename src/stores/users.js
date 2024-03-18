@@ -51,8 +51,29 @@ export const useUserStore = defineStore('user', () => {
     loading.value = false;
     errorMessage.value = ""  }
 
-  const getUsers = () => {
-    
+  const getUser = async () => {
+    loading.value = true
+    const res = await supabase.auth.getUser()
+
+    if(!res.data.user) {
+      loading.value = false
+      return user.value = null
+    }
+
+    const {data: userWithEmail} = await supabase
+      .from('users')
+      .select()
+      .eq('email', res.data.user.email)
+      .single()
+
+    user.value = {
+      username: userWithEmail.username,
+      email: userWithEmail.email,
+      id: userWithEmail.id
+    }
+
+    loading.value = false
+
   }
 
   const handleSignup = async (credentials) => {
@@ -127,7 +148,7 @@ export const useUserStore = defineStore('user', () => {
   
   return { 
     user, 
-    getUsers, 
+    getUser, 
     handleSignup,  
     handleSignout,
     errorMessage,

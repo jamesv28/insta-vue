@@ -1,8 +1,12 @@
 <script setup>
 import AuthModal from './AuthModal.vue'
 import {ref} from 'vue'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import {useUserStore} from "../stores/users"
 
+const userStore = useUserStore()
+const {user} = storeToRefs(userStore)
 const router = useRouter()
 const searchUsers = ref('')
 
@@ -31,7 +35,7 @@ const isAuthenticated = ref(false)
                     @search="onSearch"
                 />
             </div>
-            <div class="right-container" v-if="!isAuthenticated">
+            <div class="right-container" v-if="!user">
                 <auth-modal :isLogIn="false"/>
                 <auth-modal :isLogIn="true" />
             </div>
