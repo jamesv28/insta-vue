@@ -12,12 +12,15 @@ const searchUsers = ref('')
 
 const onSearch = () => {
     if(searchUsers.value.length) {
-        router.push(`/profile/${searchUsers.value}`)
+        router.push(`/profile/${user.value}`)
         searchUsers.value = ''
     }
    
 }
 
+const goToProfile = () => {
+    router.push(`/profile/${user.value.username}`)
+}
 const logout = async () => {
     await userStore.handleSignout()
 }
@@ -43,7 +46,7 @@ const logout = async () => {
                     <auth-modal :isLogIn="true" />
                 </div>
                 <div class="right-container" v-else>
-                    <a-button type="primary">Profile</a-button>
+                    <a-button type="primary" @click="goToProfile">Profile</a-button>
                     <a-button type="primary" @click="logout">Logout</a-button>
                 </div>
             </div>

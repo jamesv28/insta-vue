@@ -23,16 +23,20 @@ const data = [
 
 <template>
     <div class="profile-container">
-        <user-bar
-            username="james"
-            :userinfo="{
-                posts: 4,
-                followers: 100,
-                following: 400
-            }"
-        />
-        <h3>image gallery</h3>
-        <ImageGallery :images="data" />
+      <a-row>
+        <a-col :span="14" :offset="5">
+          <user-bar
+              username="james"
+              :userinfo="{
+                  posts: 4,
+                  followers: 100,
+                  following: 400
+              }"
+          />
+          <h3>image gallery</h3>
+          <ImageGallery :images="data" />
+        </a-col>
+      </a-row>
     </div>
 </template>
 
