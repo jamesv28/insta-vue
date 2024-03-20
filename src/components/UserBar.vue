@@ -1,4 +1,6 @@
 <script setup>
+import UploadPhotoModal from './UploadPhotoModal.vue'
+
 const props = defineProps(['username', 'userinfo'])
 </script>
 
@@ -6,6 +8,7 @@ const props = defineProps(['username', 'userinfo'])
     <div class="userbar-container">
         <div class="top-content">
             <a-typography-title :level="2">{{ username }}</a-typography-title>
+            <upload-photo-modal />
         </div>
         <div class="bottom-content">
             <a-typography-title :level="5">{{ `${userinfo.posts} posts` }}</a-typography-title>
@@ -28,6 +31,12 @@ const props = defineProps(['username', 'userinfo'])
 .bottom-content {
     display: flex;
     align-items: center;
+}
+
+.top-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .bottom-content h5 {
