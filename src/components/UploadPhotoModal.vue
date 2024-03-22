@@ -8,6 +8,7 @@ const showModal = () => {
 
 const uploadPHoto = () => {
     open.value = true
+
 }
 
 const handleOk = (e) => {
@@ -20,9 +21,7 @@ const handleOk = (e) => {
     <div>
         <a-button type="" @click="uploadPHoto">Upload Photo</a-button>
         <a-modal v-model:open="open" title="Basic Modal" @ok="handleOk">
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        
         </a-modal>
   </div>
 </template>

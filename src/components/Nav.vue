@@ -12,7 +12,7 @@ const searchUsers = ref('')
 
 const onSearch = () => {
     if(searchUsers.value.length) {
-        router.push(`/profile/${user.value}`)
+        router.push(`/profile/${searchUsers.value}`)
         searchUsers.value = ''
     }
    

@@ -26,6 +26,7 @@ const data = [
       <a-row>
         <a-col :span="14" :offset="5">
           <user-bar
+              :key="$route.params.id"
               username="james"
               :userinfo="{
                   posts: 4,

@@ -1,6 +1,13 @@
 <script setup>
 import UploadPhotoModal from './UploadPhotoModal.vue'
+import { useRoute } from 'vue-router'
+import { useUserStore } from '@/stores/users';
+import { storeToRefs } from 'pinia'
 
+const userStore = useUserStore()
+const {user} = storeToRefs(userStore)
+const route = useRoute()
+const {id: profileName} = route.params
 const props = defineProps(['username', 'userinfo'])
 </script>
 
@@ -8,7 +15,7 @@ const props = defineProps(['username', 'userinfo'])
     <div class="userbar-container">
         <div class="top-content">
             <a-typography-title :level="2">{{ username }}</a-typography-title>
-            <upload-photo-modal />
+            <upload-photo-modal v-if="user && user.username === profileName"/>
         </div>
         <div class="bottom-content">
             <a-typography-title :level="5">{{ `${userinfo.posts} posts` }}</a-typography-title>
